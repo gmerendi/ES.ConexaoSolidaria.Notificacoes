@@ -1,0 +1,13 @@
+services:
+  cs.notificacoes:
+    image: ${DOCKER_REGISTRY-}notificacoes
+    build:
+      context: .
+      dockerfile: src/Notificacoes/Dockerfile
+
+  cs.mailpit:
+    image: axllent/mailpit:latest
+    container_name: cs-mailpit
+    ports:
+      - "1025:1025"  # SMTP — o worker envia para essa porta
+      - "8025:8025"  # Interface web 
