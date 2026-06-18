@@ -28,7 +28,7 @@ public class UserCreatedEventConsumer : IConsumer<UserCreatedEvent>
     {
         var userEvent = context.Message;
 
-        _logger.LogInformation("Evento recebido: DonationCreatedEvent", BaseLogType.EVENT, userEvent, userEvent.correlationId);
+        _logger.LogInformation("Evento recebido: UserCreatedEvent", BaseLogType.EVENT, userEvent, userEvent.correlationId);
 
 
         try
