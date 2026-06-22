@@ -35,10 +35,15 @@ logger.LogInformation(" ***** ({0}/{1}) - Termino inicialização de Infrastruct
 
 builder.Services.AddHostedService<Worker>();
 
+// ──────────────────────────────────────────────────────────────────────────────
+// ── Health Check
+// ──────────────────────────────────────────────────────────────────────────────
+builder.Services.AddHealthChecks();
+
+
 var host = builder.Build();
 
 host.Run();
-
 
 
 
