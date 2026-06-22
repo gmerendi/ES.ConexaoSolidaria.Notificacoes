@@ -1,10 +1,8 @@
 ﻿using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
-using Notificacoes.Domain.Enums;
 using Notificacoes.Domain.Shared.Interface;
 using Notificacoes.Domain.Shared.Interfaces;
-using Org.BouncyCastle.Cms;
 
 namespace Notificacoes.Infrastructure.Services.Email;
 
