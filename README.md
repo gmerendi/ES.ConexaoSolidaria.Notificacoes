@@ -43,7 +43,6 @@ Este serviço é um consumidor de eventos assíncrono: ele não expõe nenhuma A
 |---|---|---|---|
 | `UserCreatedEvent` | `UserCreatedEventConsumer` | Envia e-mail de boas-vindas ao novo usuário | ✅ Ativo |
 | `DonationProcessedEvent` | `DonationProcessedEventConsumer` | Envia e-mail de confirmação de doação processada | ✅ Ativo |
-| `CampaignCreatedEvent` | `CampaignCreatedEventConsumer` | Notificar usuários sobre nova campanha | ⚠️ Parcial — consumer existe, mas o envio de e-mail está comentado e ele **não está registrado** no `AddConsumer` do MassTransit; nenhum serviço publica esse evento hoje |
 
 ## Como Rodar Localmente
 
@@ -75,7 +74,6 @@ O `docker-compose.yml` sobe o Worker de Notificações e o **Mailpit** (servidor
 | `RabbitMq__Host` / `RabbitMq__Username` / `RabbitMq__Password` | Conexão com o RabbitMQ |
 | `QUEUES__USER_CREATED_QUEUE` | Fila do evento `UserCreatedEvent` |
 | `QUEUES__DONATION_PROCESSED_QUEUE` | Fila do evento `DonationProcessedEvent` |
-| `QUEUES__CAMPAIGN_CREATED_QUEUE` | Fila do evento `CampaignCreatedEvent` (lida na configuração, mas ainda sem endpoint/consumer ativo) |
 | `Application__Type` | `LOCAL` ou `AWS` — define se a conexão ao RabbitMQ usa hostname simples ou URI completa |
 | `Email__SmtpHost` | Host do servidor SMTP (`mailpit` por padrão) |
 | `Email__SmtpPort` | Porta do servidor SMTP (`1025` por padrão) |
