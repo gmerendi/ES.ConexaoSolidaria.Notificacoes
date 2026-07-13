@@ -34,15 +34,15 @@ public class UserCreatedEventConsumer : IConsumer<UserCreatedEvent>
         try
         {
             await _emailService.SendUserCreatedEmailAsync(userEvent.nomeCompleto, userEvent.email, userEvent.cpf);
-           
-            _logger.LogInformation("E-mail de usuario criado enviado para " + userEvent.email, BaseLogType.EVENT, userEvent, userEvent.correlationId);
+
+            _logger.LogInformation($"E-mail de usuário criado enviado para {userEvent.email}.", BaseLogType.EVENT, userEvent, userEvent.correlationId);
 
         }
         catch (Exception ex)
         {
-            _logger.LogError("Erro ao enviar e-mail de usuario criado com correlationId: " + userEvent.correlationId,
-                BaseLogType.EVENT, ex, userEvent.correlationId);
-            
+            _logger.LogError($"Erro ao enviar e-mail de usuário criado com correlationId: {userEvent.correlationId}", BaseLogType.EVENT, ex,
+                userEvent, userEvent.correlationId);
+
             // Lançar exceção para que o MassTransit tente reprocessar a mensagem
             throw;
         }
