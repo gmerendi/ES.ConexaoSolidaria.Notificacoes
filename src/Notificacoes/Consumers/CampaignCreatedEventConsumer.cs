@@ -33,15 +33,13 @@ public class CampaignCreatedEventConsumer : IConsumer<CampaignCreatedEvent>
 
         try
         {
-           // await _emailService.SendCampaignCreatedEmailAsync(campaignEvent., userEvent.email, userEvent.cpf);
-           
-            _logger.LogInformation("E-mail de campanha " + campaignEvent.nomeCampanha + " criada enviado para usuarios.", BaseLogType.EVENT, campaignEvent, campaignEvent.correlationId);
+
+            _logger.LogInformation($"E-mail de campanha '{campaignEvent.nomeCampanha}' criada enviado para usuários.", BaseLogType.EVENT, campaignEvent, campaignEvent.correlationId);
 
         }
         catch (Exception ex)
         {
-            _logger.LogError("Erro ao enviar e-mail de campanha criada com correlationId: " + campaignEvent.correlationId,
-                BaseLogType.EVENT, ex, campaignEvent.correlationId);
+            _logger.LogError($"Erro ao enviar e-mail de campanha criada com correlationId: {campaignEvent.correlationId}", BaseLogType.EVENT, ex,  campaignEvent, campaignEvent.correlationId);
             
             // Lançar exceção para que o MassTransit tente reprocessar a mensagem
             throw;

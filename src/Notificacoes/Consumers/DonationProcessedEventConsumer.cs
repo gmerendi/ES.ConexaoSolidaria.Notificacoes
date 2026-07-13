@@ -34,14 +34,14 @@ public class DonationProcessedEventConsumer : IConsumer<DonationProcessedEvent>
         try
         {
             await _emailService.SendDonationProcessedEmailAsync(donationEvent.nome, donationEvent.email, donationEvent.tituloCampanha, donationEvent.valor);
-           
-            _logger.LogInformation("E-mail de doacao processsada enviado para " + donationEvent.email, BaseLogType.EVENT, donationEvent, donationEvent.correlationId);
+
+            _logger.LogInformation($"E-mail de doação processada enviado para {donationEvent.email}.", BaseLogType.EVENT, donationEvent,donationEvent.correlationId);
 
         }
         catch (Exception ex)
         {
-            _logger.LogError("Erro ao enviar e-mail de doacao processada para o usuario: " + donationEvent.email,
-                BaseLogType.EVENT, ex, donationEvent.correlationId);
+            _logger.LogError($"Erro ao enviar e-mail de doação processada para o usuário: {donationEvent.email}", BaseLogType.EVENT, ex, 
+                donationEvent, donationEvent.correlationId);
             
             // Lançar exceção para que o MassTransit tente reprocessar a mensagem
             throw;
