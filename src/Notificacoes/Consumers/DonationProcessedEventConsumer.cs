@@ -33,7 +33,7 @@ public class DonationProcessedEventConsumer : IConsumer<DonationProcessedEvent>
 
         try
         {
-            await _emailService.SendDonationProcessedEmailAsync(donationEvent.nome, donationEvent.email, donationEvent.tituloCampanha, donationEvent.valor);
+            await _emailService.SendDonationProcessedEmailAsync(donationEvent.nome, donationEvent.email, donationEvent.tituloCampanha, donationEvent.valor, donationEvent.status);
 
             _logger.LogInformation($"E-mail de doação processada enviado para {donationEvent.email}.", BaseLogType.EVENT, donationEvent,donationEvent.correlationId);
 
