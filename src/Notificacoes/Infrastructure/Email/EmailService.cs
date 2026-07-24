@@ -1,6 +1,7 @@
 ﻿using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
+using Notificacoes.Domain.Enums;
 using Notificacoes.Domain.Shared.Interface;
 using Notificacoes.Domain.Shared.Interfaces;
 
@@ -88,6 +89,7 @@ public class SmtpEmailService : IEmailService
         string email,
         string tituloCampanha,
         decimal valor,
+        string status,
         CancellationToken ct = default)
     {
         if (string.IsNullOrWhiteSpace(email))
@@ -105,10 +107,10 @@ public class SmtpEmailService : IEmailService
                 _configuration["Email:EmailRemetente"] ?? "noreply@conexaosolidaria.com.br"));
 
             message.To.Add(new MailboxAddress(nome, email));
-            message.Subject = "Conexão Solidária - Doacao Processada";
+            message.Subject = (status == DoacaoStatus.APROVADA.ToString()) ? "Conexão Solidária - Doacao Processada" : "Conexão Solidária - Doacao Recusada";
             message.Body = new TextPart("html")
             {
-                Text = GerarEmailDoacaoProcessada(nome, tituloCampanha, valor)
+                Text = (status == DoacaoStatus.APROVADA.ToString()) ? GerarEmailDoacaoAprovada(nome, tituloCampanha, valor) : GerarEmailDoacaoRecusada(nome, tituloCampanha, valor)
             };
 
             using var smtp = new SmtpClient();
@@ -129,7 +131,7 @@ public class SmtpEmailService : IEmailService
     }
 
 
-    private static string GerarEmailDoacaoProcessada(string nome, string tituloCampanha, decimal valor) => $"""
+    private static string GerarEmailDoacaoAprovada(string nome, string tituloCampanha, decimal valor) => $"""
         <!DOCTYPE html>
         <html>
         <body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
@@ -145,6 +147,34 @@ public class SmtpEmailService : IEmailService
                     <p><strong>Data:</strong> {DateTime.Now:dd/MM/yyyy HH:mm}</p>
                 </div>
                 <p>Sua generosidade ajuda a transformar vidas. Muito obrigado! 🙏</p>
+                
+                <p>Verifique as campanhas ativas em nosso site <a href="https://www.conexaosolidaria.com.br">www.conexaosolidaria.com.br</a></p>
+                <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
+                <p style="color: #999; font-size: 12px;">
+                    Este é um email automático. Por favor, não responda.
+                </p>
+            </div>
+        </body>
+        </html>
+        """;
+
+
+    private static string GerarEmailDoacaoRecusada(string nome, string tituloCampanha, decimal valor) => $"""
+        <!DOCTYPE html>
+        <html>
+        <body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+            <div style="background-color: #4CAF50; padding: 20px; border-radius: 8px 8px 0 0;">
+                <h1 style="color: white; margin: 0;">💚 Conexão Solidária</h1>
+            </div>
+            <div style="background-color: #f9f9f9; padding: 30px; border-radius: 0 0 8px 8px;">
+                <h2>Olá, {nome}!</h2>
+                <p>Infelizmente sua doação foi recusada! Por favor, verifique os dados do pagamento ou tente novamente com outra forma de pagamento.</p>
+                <div style="background-color: white; padding: 20px; border-radius: 8px; border-left: 4px solid #4CAF50; margin: 20px 0;">
+                    <p><strong>Campanha:</strong> {tituloCampanha}</p>
+                    <p><strong>Valor doado:</strong> R$ {valor:F2}</p>
+                    <p><strong>Data:</strong> {DateTime.Now:dd/MM/yyyy HH:mm}</p>
+                </div>
+                <p>Ainda dá tempo de transformar vidas! 🙏</p>
                 
                 <p>Verifique as campanhas ativas em nosso site <a href="https://www.conexaosolidaria.com.br">www.conexaosolidaria.com.br</a></p>
                 <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
